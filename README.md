@@ -2,18 +2,15 @@
 Stores your $_SESSION in Redis, using encoding of your choice. Dependency: [predis](https://github.com/nrk/predis) (included as submodule)
 
 ### Installation
-Clone:
 
-````
-git clone https://TheDeveloper@github.com/TheDeveloper/redis-session-php.git
-````
-Or include as a submodule:
+```composer require RedisSessionPhp```
 
-    git submodule add https://TheDeveloper@github.com/TheDeveloper/redis-session-php.git
-    
 ### Usage
 ````
-require('redis-session-php/redis-session.php');
+require('vendor/autoload.php');
+
+use RedisSessionPhp\RedisSession;
+
 RedisSession::start(); // overrides PHP's default session_save_handler and calls session_start()
 
 // use sessions as normal

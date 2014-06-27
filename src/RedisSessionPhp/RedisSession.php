@@ -1,12 +1,6 @@
 <?php
-if(!class_exists('\Predis\Client')){
-  require_once('modules/predis/lib/Predis/Autoloader.php');
-  Predis\Autoloader::register();
-}
 
-function json_decode_array($d){
-  return json_decode($d, true);
-}
+namespace RedisSessionPhp;
 
 /**
  * By default this is a no-op but can be replaced by a custom function if REDIS_SESSION_ID_MUTATOR constant is defined
@@ -15,12 +9,20 @@ function json_decode_array($d){
  * @param  string $id The session ID
  * @return string     Unaltered session ID
  */
-function redis_session_id_mutator($id){
-  return $id;
+if (!function_exists('redis_session_id_mutator')) {
+    function redis_session_id_mutator($id){
+      return $id;
+    }
+}
+
+if (!function_exists('json_decode_array')) {
+    function json_decode_array($d){
+      return json_decode($d, true);
+    }
 }
 
 //class RedisSession implements SessionHandlerInterface{ // only PHP 5.4.0+
-class RedisSession{
+class RedisSession {
   private $serializer;
   private $unserializer;
   private $unpackItems;

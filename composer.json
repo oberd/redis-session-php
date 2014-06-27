@@ -1,0 +1,21 @@
+{
+    "name": "UniversalResearchSolutions/RedisSessionPhp",
+    "description": "Redis session handler for PHP",
+    "require": {
+        "predis/predis": "0.8.x"
+    },
+    "autoload": {
+        "psr-0": { "RedisSessionPhp\\": "src/" }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Geoff Wagstaff",
+            "email": "geoff@gosquared.com"
+        },
+        {
+            "name": "Nathan Bleigh",
+            "email": "nathan.bleigh@gmail.com"
+        }
+    ]
+}
