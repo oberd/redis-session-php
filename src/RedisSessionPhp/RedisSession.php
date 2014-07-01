@@ -33,9 +33,9 @@ namespace RedisSessionPhp {
       if(!defined('REDIS_SESSION_PREFIX'))
         define('REDIS_SESSION_PREFIX', 'session:php:');
       if(!defined('REDIS_SESSION_SERIALIZER'))
-        define('REDIS_SESSION_SERIALIZER', 'json_encode');
+        define('REDIS_SESSION_SERIALIZER', 'serialize');
       if(!defined('REDIS_SESSION_UNSERIALIZER'))
-        define('REDIS_SESSION_UNSERIALIZER', 'json_decode_array');
+        define('REDIS_SESSION_UNSERIALIZER', 'unserialize');
       if(!defined('REDIS_SESSION_ID_MUTATOR'))
         define('REDIS_SESSION_ID_MUTATOR', 'redis_session_id_mutator');
       $obj = new self($redis_conf, $unpackItems);
