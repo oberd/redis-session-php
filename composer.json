@@ -1,5 +1,5 @@
 {
-    "name": "UniversalResearchSolutions/RedisSessionPhp",
+    "name": "oberd/RedisSessionPhp",
     "description": "Redis session handler for PHP",
     "require": {
         "predis/predis": "0.8.x"
