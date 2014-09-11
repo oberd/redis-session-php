@@ -48,32 +48,6 @@ For only objects:
 Requires PHP unit. We need to run phpunit with a bootstrap to get around PHP complaining about header output when it tries to start the session:
 
     phpunit --bootstrap test/bootstrap.php test/suite.php
-        
-### Session serialization rant:
-PHP natively uses a very obfuscated serialisation format (apparently only session_decode() can read it). I don't have time to go digging through PHP source and writing my own adapter.
-
-````
-/**
-     * RANT: It's seemingly impossible to parse the value in $data.
-     * Example:
-     *
-     * PHP Serialises the following:
-     * $_SESSION['test'] = "ohai";
-     * $_SESSION['md'] = array('test2' => array('multidimensional' => 'array'));
-     * $_SESSION['more'] = new stdClass;
-     *
-     * Gives:
-     *
-     * test|s:4:"ohai";md|a:1:{s:5:"test2";a:1:{s:16:"multidimensional";s:5:"array";}}more|O:8:"stdClass":0:{}
-     *
-     * Where are the delimeters between keys? I'm testing this on PHP 5.3.8 with
-     * Suhosin patch, and session_decode() gives false.
-     *
-     * This is why, on write, we have to access $_SESSION and encode that into
-     * a format which is more generic and world readable
-     */
-     
-````
 
 ### The other stuff
 Inspired by https://github.com/ivanstojic/redis-session-php and http://gonzalo123.wordpress.com/2011/07/25/using-node-js-to-store-php-sessions/
