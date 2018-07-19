@@ -22,8 +22,7 @@ namespace {
 }
 
 namespace RedisSessionPhp {
-  //class RedisSession implements SessionHandlerInterface{ // only PHP 5.4.0+
-  class RedisSession {
+  class RedisSession implements \SessionHandlerInterface {
     private $serializer;
     private $unserializer;
     private $unpackItems;
@@ -39,13 +38,7 @@ namespace RedisSessionPhp {
       if(!defined('REDIS_SESSION_ID_MUTATOR'))
         define('REDIS_SESSION_ID_MUTATOR', 'redis_session_id_mutator');
       $obj = new self($redis_conf, $unpackItems);
-      session_set_save_handler(
-        array($obj, "open"),
-        array($obj, "close"),
-        array($obj, "read"),
-        array($obj, "write"),
-        array($obj, "destroy"),
-        array($obj, "gc"));
+      session_set_save_handler($obj, true);
       session_start(); // Because we start the session here, any other modifications to the session must be done before this class is started
       return $obj;
     }
@@ -72,9 +65,14 @@ namespace RedisSessionPhp {
     }
 
     function read($id) {
-      $d = $this->unserializer($this->redis->get(REDIS_SESSION_PREFIX . $this->id_mutator($id)));
+      $value = $this->redis->get(REDIS_SESSION_PREFIX . $this->id_mutator($id));
+      if (empty($value)) {
+        return '';
+      }
+      $d = $this->unserializer($value);
       // Revive $_SESSION from our array
       $_SESSION = $d;
+      return $value;
     }
 
 
@@ -119,6 +117,7 @@ namespace RedisSessionPhp {
           //}
         //}
       });
+      return true;
     }
 
 
@@ -130,17 +129,18 @@ namespace RedisSessionPhp {
       //foreach ($unpacked as $unp) {
         //$this->redis->del($unp);
       //}
+      return true;
     }
 
 
     // These functions are all noops for various reasons... opening has no practical meaning in
     // terms of non-shared Redis connections, the same for closing. Garbage collection is handled by
     // Redis anyway.
-    function open($path, $name) {}
-      function close() {}
-      function gc($age) {}
+    function open($path, $name) { return true; }
+    function close() { return true; }
+    function gc($age) { return true; }
   }
 
   // the following prevents unexpected effects when using objects as save handlers
-  register_shutdown_function('session_write_close');
+  session_register_shutdown();
 }
